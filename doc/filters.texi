@@ -1806,6 +1806,27 @@ At end of filtering it displays @code{track_gain} and @code{track_peak}.
 Convert the audio sample format, sample rate and channel layout. It is
 not meant to be used directly.
 
+@section showvolume
+
+Show a line containing volume information for each input audio sample.
+The input audio is not modified.
+
+The shown line contains a sequence of key/value pairs of the form
+@var{key}: @var{value} separated by comma.
+
+The following values are shown in the output:
+
+@table @option
+@item n
+The (sequential) number of the input sample, starting from 0.
+
+@item channel
+The audio channel this sample is part of.
+
+@item volume
+The pcm value representing the volume of that sample.
+@end table
+
 @section silencedetect
 
 Detect silence in an audio stream.
