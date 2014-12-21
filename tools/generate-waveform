@@ -1,0 +1,59 @@
+#!/bin/bash
+
+# Copyright (c) 2014 Lars Kiesow
+#
+# This file is part of FFmpeg.
+#
+# FFmpeg is free software; you can redistribute it and/or
+# modify it under the terms of the GNU Lesser General Public
+# License as published by the Free Software Foundation; either
+# version 2.1 of the License, or (at your option) any later version.
+#
+# FFmpeg is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+# See the GNU Lesser General Public License for more details.
+#
+# You should have received a copy of the GNU Lesser General Public License
+# along with FFmpeg; if not, write to the Free Software Foundation, Inc.,
+# 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
+
+[ $# -ne 2 ] && echo Usage: $0 INFILE OUTFILE && exit
+
+# Define plotting options:
+# - Define output format and size
+# - Define output file
+# - Remove axis and borders
+# - Plot from stdin
+PLOTCMD="
+    set terminal png size 5000,500;
+    set output '$2';
+
+    unset key;
+    unset tics;
+    unset border;
+    set lmargin 0;
+    set rmargin 0;
+    set tmargin 0;
+    set bmargin 0;
+
+    plot '-' using 9 with lines"
+
+# To make the y-axis centered and cut off peaks add the following line (adjust
+# the values):
+#    set yrange [-600:600];
+
+# For plotting stereo (or even more channels, use a gnuplot multiplot command
+# instead of the plot command:
+#
+#    set multiplot layout 2,1
+#    plot '-' using 9 every 2::0 with lines
+#    plot '-' using 9 every 2::1 with lines
+#    unset multiplot
+#
+# ...also make sure to change the audio channel option in the ffmpeg command to
+# stereo (-ac 2)
+
+ffmpeg -hide_banner -nostats -i "$1" -ac 1 -filter:a aresample=100,showvolume -f null - 2>&1 | \
+   grep '^\[Parsed_showvolume_1' | \
+   gnuplot -e "${PLOTCMD}"
