@@ -81,6 +81,7 @@ OBJS-$(CONFIG_SILENCEREMOVE_FILTER)          += af_silenceremove.o
 OBJS-$(CONFIG_TREBLE_FILTER)                 += af_biquads.o
 OBJS-$(CONFIG_VOLUME_FILTER)                 += af_volume.o
 OBJS-$(CONFIG_VOLUMEDETECT_FILTER)           += af_volumedetect.o
+OBJS-$(CONFIG_SHOWVOLUME_FILTER)             += af_showvolume.o
 
 OBJS-$(CONFIG_AEVALSRC_FILTER)               += aeval.o
 OBJS-$(CONFIG_ANULLSRC_FILTER)               += asrc_anullsrc.o
