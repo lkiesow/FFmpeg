@@ -472,6 +472,7 @@ static int filter_frame(AVFilterLink *inlink, AVFrame *in)
 
         ff_ebur128_loudness_shortterm(s->r128_in, &shortterm);
 
+        av_log(ctx, AV_LOG_INFO, "%.2f\n%.2f\n", shortterm, s->measured_thresh);
         if (shortterm < s->measured_thresh) {
             s->above_threshold = 0;
             env_shortterm = shortterm <= -70. ? 0. : s->target_i - s->measured_i;
@@ -648,7 +649,7 @@ static int request_frame(AVFilterLink *outlink)
     ret = ff_request_frame(inlink);
     if (ret == AVERROR_EOF && s->frame_type == INNER_FRAME) {
         double *src;
-        double *buf;
+         double *buf;
         int nb_samples, n, c, offset;
         AVFrame *frame;
 
